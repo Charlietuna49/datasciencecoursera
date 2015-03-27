@@ -71,20 +71,24 @@ for(state in states){
  #print(num)
  if(num=="best")rowNum<-1 ## set num = first hosptial
  if(num=="worst")rowNum<-numHosp ## set num = last hospital
+ if(is.numeric(num))rowNum<-num
  if(rowNum>numHosp){
      outHosp<- c(outHosp,NA)
      outState<-c(outState,state)
-     next
-     
-     
+     next    
  } 
+ 
+ 
+ 
   ##print(HospStateOutcomes[num,2])
   ##print(HospStateOutcomes[num,1])
   ##output<- c(output,HospStateOutcomes[num,1],state)
-  #print("row Number")
-  #print(rowNum)
+  ##print("row Number")
+  ##print(rowNum)
+  ##print(state)
   outState<-c(outState,state)
   ##print(mode(outState))
+  ##if(is.numeric(num)) rowNum<-num
   outHosp<- c(outHosp,HospStateOutcomes[rowNum,1])
   #outHosp<- t(c(outHosp))
   ##print(outHosp)
