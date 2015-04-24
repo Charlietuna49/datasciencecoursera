@@ -20,7 +20,11 @@ meanStd$V2<-gsub(pattern="Acc",replacement="acceleration", x=meanStd$V2)
 meanStd$V2<-gsub(pattern="Gyro",replacement="gyroscopic", x=meanStd$V2)
 meanStd$V2<-gsub("(mean)","\\.\\1",meanStd$V2, perl = T)
 meanStd$V2<-gsub("(std)","\\.\\1deviation",meanStd$V2, perl = T)
-
+meanStd$V2<-gsub(pattern= "y$", replacement ="ofy",ignore.case =T, x =meanStd$V2)
+meanStd$V2<-gsub(pattern= "x$",ignore.case =T,replacement = "ofx", x =meanStd$V2)
+meanStd$V2<-gsub(pattern= "z$",ignore.case = T,replacement = "ofz", x =meanStd$V2)
+meanStd$V2<-gsub(pattern= "^t",ignore.case = T,replacement = "time", x =meanStd$V2)
+meanStd$V2<-gsub(pattern= "^f",ignore.case = T,replacement = "fastfourier", x =meanStd$V2)
 
 meanStd$V2<-tolower(meanStd$V2)
 
@@ -54,6 +58,14 @@ names(combox)<- c(meanStd$V2, "activity","subject")
 # join with activity name table
 act<-rename(activity_labels,activity = V1, activities = V2)
 join<-inner_join(combox, act, by = c("activity" = "activity"))
+
+
+# group by and run functions mean, sd
+by_subject_activity<-join %>% 
+  group_by(subject,activities) %>%
+  summarise_each(funs(mean,sd),-activity)
+
+  
 
 
 
