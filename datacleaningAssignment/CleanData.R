@@ -1,10 +1,9 @@
+## load dplyr package
 library(dplyr)
+
+## read original text files
 if(!exists("features")) features<- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/features.txt", quote="\"", stringsAsFactors=FALSE)
-##View(features)
-nrow(features)
 if(!exists("X_test")) X_test <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/X_test.txt", quote="\"", stringsAsFactors=FALSE)
-##View(X_test)
-##ncol(X_test)
 if(!exists("X_train")) X_train <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/X_train.txt", quote="\"", stringsAsFactors=FALSE)
 if(!exists("y_test")) y_test <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/y_test.txt", quote="\"", stringsAsFactors=FALSE)
 if(!exists("y_train"))y_train <-read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/y_train.txt", quote="\"", stringsAsFactors=FALSE)
@@ -18,8 +17,10 @@ meanStd$V2<-gsub(pattern="-|\\(\\)",replacement="", x=meanStd$V2)
 meanStd$V2<-gsub(pattern="BodyBody",replacement="Body", x=meanStd$V2)
 meanStd$V2<-gsub(pattern="Acc",replacement="acceleration", x=meanStd$V2)
 meanStd$V2<-gsub(pattern="Gyro",replacement="gyroscopic", x=meanStd$V2)
-meanStd$V2<-gsub("(mean)","\\.\\1",meanStd$V2, perl = T)
-meanStd$V2<-gsub("(std)","\\.\\1deviation",meanStd$V2, perl = T)
+meanStd$V2<-gsub(pattern="std",replacement="standarddeviation", x=meanStd$V2)
+
+#meanStd$V2<-gsub("(mean)","\\.\\1",meanStd$V2, perl = T)
+#meanStd$V2<-gsub("(std)","\\.\\1deviation",meanStd$V2, perl = T)
 meanStd$V2<-gsub(pattern= "y$", replacement ="ofy",ignore.case =T, x =meanStd$V2)
 meanStd$V2<-gsub(pattern= "x$",ignore.case =T,replacement = "ofx", x =meanStd$V2)
 meanStd$V2<-gsub(pattern= "z$",ignore.case = T,replacement = "ofz", x =meanStd$V2)
