@@ -2,14 +2,14 @@
 library(dplyr)
 
 ## read original text files
-if(!exists("features")) features<- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/features.txt", quote="\"", stringsAsFactors=FALSE)
-if(!exists("X_test")) X_test <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/X_test.txt", quote="\"", stringsAsFactors=FALSE)
-if(!exists("X_train")) X_train <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/X_train.txt", quote="\"", stringsAsFactors=FALSE)
-if(!exists("y_test")) y_test <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/y_test.txt", quote="\"", stringsAsFactors=FALSE)
-if(!exists("y_train"))y_train <-read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/y_train.txt", quote="\"", stringsAsFactors=FALSE)
-if(!exists("subject_test")) subject_test <-read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/subject_test.txt", quote="\"", stringsAsFactors=FALSE)
-if(!exists("subject_train"))subject_train<-read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/subject_train.txt", quote="\"", stringsAsFactors=FALSE)
-if(!exists("activity_labels"))activity_labels <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/activity_labels.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("features")) features<- read.table("./features.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("X_test")) X_test <- read.table("./test/X_test.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("X_train")) X_train <- read.table("./train/X_train.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("y_test")) y_test <- read.table("./test/y_test.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("y_train"))y_train <-read.table("./train/y_train.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("subject_test")) subject_test <-read.table("./test/subject_test.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("subject_train"))subject_train<-read.table("./train/subject_train.txt", quote="\"", stringsAsFactors=FALSE)
+if(!exists("activity_labels"))activity_labels <- read.table("./activity_labels.txt", quote="\"", stringsAsFactors=FALSE)
 
 ## Obtain only the mean() or std measurements
 meanStd<-features[grep("std|mean\\(\\)",features$V2),]

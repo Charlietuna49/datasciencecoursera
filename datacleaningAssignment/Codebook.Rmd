@@ -187,6 +187,7 @@ tBodyGyroJerkMean
 The complete list of variables of each feature vector is available in 'features.txt'
 
 ## For the purposes of this analysis:
+## R-script name: run_analysis.R
 
 ### 
 ###     The training and test datasets were merged and only the mean and standard deviation measurements were used. Therefore, only the following raw variables were used.
