@@ -1,0 +1,183 @@
+---
+title: "Readme"
+author: "Steve Tannenbaum"
+date: "Sunday, April 26, 2015"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+### The variable names were changed to incorporate the following rules:
+####Names of variables should be
+
+   - All lower case when possible
+   - Descriptive (Diagnosis versus Dx)
+   - Not duplicated
+   - Not have underscores or dots or white spaces
+   
+   
+## load dplyr package
+```{r}
+library(dplyr)
+
+```
+
+
+## read original text files
+
+```{r}
+if(!exists("features")) features<- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/features.txt", quote="\"", stringsAsFactors=FALSE)
+
+if(!exists("X_test")) X_test <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/X_test.txt", quote="\"", stringsAsFactors=FALSE)
+
+if(!exists("X_train")) X_train <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/X_train.txt", quote="\"", stringsAsFactors=FALSE)
+
+if(!exists("y_test")) y_test <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/y_test.txt", quote="\"", stringsAsFactors=FALSE)
+
+if(!exists("y_train"))y_train <-read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/y_train.txt", quote="\"", stringsAsFactors=FALSE)
+
+if(!exists("subject_test")) subject_test <-read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/test/subject_test.txt", quote="\"", stringsAsFactors=FALSE)
+
+if(!exists("subject_train"))subject_train<-read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/train/subject_train.txt", quote="\"", stringsAsFactors=FALSE)
+
+if(!exists("activity_labels"))activity_labels <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/activity_labels.txt", quote="\"", stringsAsFactors=FALSE)
+
+```
+
+## Obtain only the mean() or std measurements
+```{r}
+meanStd<-features[grep("std|mean\\(\\)",features$V2),]
+```
+
+
+## remove - or ()
+```{r}
+meanStd$V2<-gsub(pattern="-|\\(\\)",replacement="", x=meanStd$V2)
+```
+
+
+## remove BodyBody and replace with Body
+```{r}
+meanStd$V2<-gsub(pattern="BodyBody",replacement="Body", x=meanStd$V2)
+```
+
+
+## remove Acc and replace with accelaration
+```{r}
+meanStd$V2<-gsub(pattern="Acc",replacement="acceleration", x=meanStd$V2)
+```
+
+
+## remove Gyro and replace with gyroscopic
+```{r}
+meanStd$V2<-gsub(pattern="Gyro",replacement="gyroscopic", x=meanStd$V2)
+```
+
+
+## remove std and replace with standdeviation
+```{r}
+meanStd$V2<-gsub(pattern="std",replacement="standarddeviation", x=meanStd$V2)
+```
+
+
+## remove y and replace with ofy
+
+```{r}
+meanStd$V2<-gsub(pattern= "y$", replacement ="ofy",ignore.case =T, x =meanStd$V2)
+```
+
+## remove x and replace with ofx
+```{r}
+meanStd$V2<-gsub(pattern= "x$",ignore.case =T,replacement = "ofx", x =meanStd$V2)
+```
+
+
+## remove z and replace with ofz
+```{r}
+meanStd$V2<-gsub(pattern= "z$",ignore.case = T,replacement = "ofz", x =meanStd$V2)
+```
+
+
+## remove t and replace with time
+```{r}
+meanStd$V2<-gsub(pattern= "^t",ignore.case = T,replacement = "time", x =meanStd$V2)
+```
+
+
+## remove f and replace with fastfourier
+```{r}
+meanStd$V2<-gsub(pattern= "^f",ignore.case = T,replacement = "fastfourier", x =meanStd$V2)
+```
+
+## change all case to lower case
+```{r}
+meanStd$V2<-tolower(meanStd$V2)
+```
+
+## final resulting variables
+
+```{r, echo=FALSE,cache=TRUE}
+newVariableNames <- read.table("C:/Users/Charlietuna/datasciencecoursera/datacleaningAssignment/newVariableNames", header=TRUE, quote="\"", stringsAsFactors=FALSE)
+print(newVariableNames$V2)
+
+
+```
+
+##select only columns needed from X train and X test using meanStd dataframe
+```{r}
+columnsNeeded<- select(meanStd, V1)
+xtrain<-select(X_train,columnsNeeded$V1)
+xtest<-select(X_test,columnsNeeded$V1)
+```
+
+
+## add activity  and subject columns
+```{r}
+names(y_test)[1]<- "activity"
+xtest<- cbind(xtest,y_test["activity"])
+names(subject_test)[1] <- "subject"
+xtest<- cbind(xtest,subject_test["subject"])
+names(y_train)[1] <- "activity"
+xtrain<- cbind(xtrain, y_train["activity"])
+names(subject_train)[1]<-"subject"
+xtrain<- cbind(xtrain,subject_train["subject"])
+```
+## result of above columns abbreviated
+```{r}
+head(select(xtest,subject,activity, V1:V5))
+```
+## combine test and train data
+```{r}
+combox<-rbind(xtest,xtrain)
+```
+## rename columns as previously noted
+```{r}
+names(combox)<- c(meanStd$V2, "activity","subject")
+head(select(combox,subject,activity, 1:2))
+
+```
+
+
+## inner join dataframe with activity labels to obtain full name of activity
+```{r}
+act<-rename(activity_labels,activity = V1, activities = V2)
+join<-inner_join(combox, act, by = c("activity" = "activity"))
+head(select(join,subject,activities, 1))
+
+```
+## group by subject and activity and then run functions mean, sd on each variable
+```{r}
+by_subject_activity<-join %>% 
+  group_by(subject,activities) %>%
+  summarise_each(funs(mean,sd),-activity)
+head(select(by_subject_activity,subject,activities, 3:60))
+
+```
+
+
+
+
+
+

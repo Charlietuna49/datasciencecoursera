@@ -1,3 +1,4 @@
+
 ---
 title: "Getting Data and Cleaning Course Project"
 author: "Steve Tannenbaum"
@@ -182,6 +183,7 @@ tBodyAccJerkMean
 tBodyGyroMean
 
 tBodyGyroJerkMean
+
 
 
 The complete list of variables of each feature vector is available in 'features.txt'
